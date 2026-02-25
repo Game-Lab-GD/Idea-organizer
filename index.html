@@ -16,6 +16,7 @@
             --text-dark: #1e293b;
             --text-light: #64748b;
             --danger: #ef4444;
+            --success: #10b981;
         }
 
         body {
@@ -28,6 +29,7 @@
             flex-direction: column;
         }
 
+        /* تعديلات الشريط العلوي لدعم القائمة المنسدلة */
         header {
             background-color: white;
             padding: 15px 30px;
@@ -37,7 +39,72 @@
             align-items: center;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
         header h1 { margin: 0; font-size: 24px; color: var(--primary); }
+
+        /* تصميم القائمة المنسدلة */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            background-color: transparent;
+            color: var(--text-dark);
+            border: 1px solid #cbd5e1;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .dropbtn:hover { background-color: #f1f5f9; }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 110%;
+            background-color: white;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+            z-index: 10;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f8fafc;
+            color: var(--primary);
+        }
+
+        /* إظهار القائمة عند تمرير الماوس */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
 
         .btn-add {
             background-color: var(--primary);
@@ -78,7 +145,6 @@
             transition: background-color 0.2s ease;
         }
         
-        /* تأثير عند سحب بطاقة فوق العمود */
         .column.drag-over {
             background-color: #cbd5e1;
             border: 2px dashed var(--primary);
@@ -98,7 +164,7 @@
             flex-direction: column;
             gap: 12px;
             overflow-y: auto;
-            min-height: 50px; /* لضمان وجود مساحة للإفلات حتى لو كان العمود فارغاً */
+            min-height: 50px;
         }
 
         .card {
@@ -107,17 +173,12 @@
             padding: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border-right: 4px solid var(--primary);
-            cursor: grab; /* شكل مؤشر الماوس للسحب */
+            cursor: grab;
             transition: opacity 0.2s;
         }
 
         .card:active { cursor: grabbing; }
-        
-        /* تأثير البطاقة أثناء سحبها */
-        .card.dragging {
-            opacity: 0.5;
-            border: 2px dashed #94a3b8;
-        }
+        .card.dragging { opacity: 0.5; border: 2px dashed #94a3b8; }
 
         .card h3 { margin: 0 0 8px 0; font-size: 16px; }
         .card p { margin: 0 0 12px 0; font-size: 13px; color: var(--text-light); }
@@ -139,16 +200,16 @@
         }
 
         .card-actions button {
-            background: none; border: none; cursor: pointer; color: var(--text-light); transition: 0.2s; padding: 5px;
+            background: none; border: none; cursor: pointer; color: var(--text-light); transition: 0.2s; padding: 5px; font-size: 14px;
         }
+        .card-actions .btn-edit:hover { color: var(--success); }
         .card-actions .btn-delete:hover { color: var(--danger); }
 
-        /* نافذة إضافة فكرة */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
         .modal { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; }
-        .modal h2 { margin-top: 0; }
+        .modal h2 { margin-top: 0; color: var(--text-dark); }
         .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; box-sizing: border-box; }
         .modal textarea { height: 100px; resize: none; }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
@@ -159,7 +220,19 @@
 <body>
 
     <header>
-        <h1><i class="fa-solid fa-video"></i> ستوديو الأفكار</h1>
+        <div class="header-right">
+            <h1><i class="fa-solid fa-video"></i> ستوديو الأفكار</h1>
+            
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fa-solid fa-layer-group"></i> أدوات إضافية</button>
+                <div class="dropdown-content">
+                    <a href="https://game-lab-gd.github.io/Game-idea-generator/" target="_blank">
+                        <i class="fa-solid fa-gamepad"></i> مولد أفكار الألعاب
+                    </a>
+                </div>
+            </div>
+
+        </div>
         <button class="btn-add" onclick="openModal()"><i class="fa-solid fa-plus"></i> فكرة جديدة</button>
     </header>
 
@@ -188,7 +261,7 @@
 
     <div class="modal-overlay" id="addModal">
         <div class="modal">
-            <h2>إضافة فيديو جديد</h2>
+            <h2 id="modalTitle">إضافة فيديو جديد</h2>
             <input type="text" id="vTitle" placeholder="عنوان الفيديو..." required>
             <select id="vPlatform">
                 <option value="يوتيوب">يوتيوب</option>
@@ -205,33 +278,69 @@
             <textarea id="vNotes" placeholder="أضف مسودة، أفكار، أو كلمات مفتاحية..."></textarea>
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
-                <button class="btn-save" onclick="saveIdea()">حفظ الفكرة</button>
+                <button class="btn-save" onclick="saveIdea()">حفظ</button>
             </div>
         </div>
     </div>
 
     <script>
         let ideasList = JSON.parse(localStorage.getItem('myVideoIdeas')) || [];
-        let draggedIdeaId = null; // متغير لحفظ الـ ID الخاص بالبطاقة التي يتم سحبها
+        let draggedIdeaId = null; 
+        let editingIdeaId = null; 
 
-        function openModal() { document.getElementById('addModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('addModal').style.display = 'none'; clearForm(); }
+        function openModal() { 
+            document.getElementById('addModal').style.display = 'flex'; 
+            document.getElementById('modalTitle').innerText = editingIdeaId ? "تعديل بيانات الفيديو" : "إضافة فيديو جديد";
+        }
+        
+        function closeModal() { 
+            document.getElementById('addModal').style.display = 'none'; 
+            clearForm(); 
+            editingIdeaId = null; 
+        }
+
         function clearForm() {
-            document.getElementById('vTitle').value = ''; document.getElementById('vNotes').value = '';
-            document.getElementById('vPlatform').selectedIndex = 0; document.getElementById('vStatus').selectedIndex = 0;
+            document.getElementById('vTitle').value = ''; 
+            document.getElementById('vNotes').value = '';
+            document.getElementById('vPlatform').selectedIndex = 0; 
+            document.getElementById('vStatus').selectedIndex = 0;
+        }
+
+        function editIdea(id) {
+            const idea = ideasList.find(i => i.id === id); 
+            if(!idea) return;
+
+            editingIdeaId = id; 
+
+            document.getElementById('vTitle').value = idea.title;
+            document.getElementById('vPlatform').value = idea.platform;
+            document.getElementById('vStatus').value = idea.status;
+            document.getElementById('vNotes').value = idea.notes || '';
+
+            openModal(); 
         }
 
         function saveIdea() {
             const title = document.getElementById('vTitle').value;
             if(!title) return alert("الرجاء كتابة العنوان");
-            const newIdea = {
-                id: Date.now(),
-                title: title,
-                platform: document.getElementById('vPlatform').value,
-                status: document.getElementById('vStatus').value,
-                notes: document.getElementById('vNotes').value
-            };
-            ideasList.push(newIdea);
+
+            if(editingIdeaId) {
+                let ideaIndex = ideasList.findIndex(i => i.id === editingIdeaId);
+                ideasList[ideaIndex].title = title;
+                ideasList[ideaIndex].platform = document.getElementById('vPlatform').value;
+                ideasList[ideaIndex].status = document.getElementById('vStatus').value;
+                ideasList[ideaIndex].notes = document.getElementById('vNotes').value;
+            } else {
+                const newIdea = {
+                    id: Date.now(),
+                    title: title,
+                    platform: document.getElementById('vPlatform').value,
+                    status: document.getElementById('vStatus').value,
+                    notes: document.getElementById('vNotes').value
+                };
+                ideasList.push(newIdea);
+            }
+
             localStorage.setItem('myVideoIdeas', JSON.stringify(ideasList));
             closeModal();
             renderBoard();
@@ -245,61 +354,34 @@
             }
         }
 
-        // --- دوال السحب والإفلات (Drag & Drop) ---
-        
-        // عند بدء سحب البطاقة
         function dragStart(event, id) {
             draggedIdeaId = id;
             setTimeout(() => event.target.classList.add('dragging'), 0);
         }
-
-        // عند انتهاء سحب البطاقة (حتى لو لم يتم إفلاتها)
         function dragEnd(event) {
             event.target.classList.remove('dragging');
             draggedIdeaId = null;
         }
-
-        // السماح بالإفلات فوق العمود
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        // إضافة تأثير بصري للعمود عند مرور البطاقة فوقه
+        function allowDrop(event) { event.preventDefault(); }
         function dragEnter(event) {
             event.preventDefault();
-            if(event.currentTarget.classList.contains('column')) {
-                event.currentTarget.classList.add('drag-over');
-            }
+            if(event.currentTarget.classList.contains('column')) event.currentTarget.classList.add('drag-over');
         }
-
-        // إزالة التأثير البصري عند خروج البطاقة من العمود
         function dragLeave(event) {
-            if(event.currentTarget.classList.contains('column')) {
-                event.currentTarget.classList.remove('drag-over');
-            }
+            if(event.currentTarget.classList.contains('column')) event.currentTarget.classList.remove('drag-over');
         }
-
-        // عند إفلات البطاقة داخل العمود الجديد
         function drop(event, newStatus) {
             event.preventDefault();
-            
-            // إزالة التأثير من العمود بعد الإفلات
-            if(event.currentTarget.classList.contains('column')) {
-                event.currentTarget.classList.remove('drag-over');
-            }
-
+            if(event.currentTarget.classList.contains('column')) event.currentTarget.classList.remove('drag-over');
             if(draggedIdeaId) {
-                // البحث عن الفكرة وتغيير حالتها
                 let idea = ideasList.find(i => i.id === draggedIdeaId);
                 if(idea && idea.status !== newStatus) {
                     idea.status = newStatus;
                     localStorage.setItem('myVideoIdeas', JSON.stringify(ideasList));
-                    renderBoard(); // إعادة رسم الشاشة
+                    renderBoard();
                 }
             }
         }
-
-        // ----------------------------------------
 
         function renderBoard() {
             const statuses = ['ideas', 'research', 'filming', 'editing', 'published'];
@@ -309,7 +391,6 @@
             });
 
             ideasList.forEach(idea => {
-                // تم إضافة الخصائص (draggable, ondragstart, ondragend) لبطاقة الفكرة
                 const cardHTML = `
                     <div class="card" draggable="true" ondragstart="dragStart(event, ${idea.id})" ondragend="dragEnd(event)">
                         <h3>${idea.title}</h3>
@@ -317,6 +398,7 @@
                         <div class="card-footer">
                             <span class="platform-tag">${idea.platform}</span>
                             <div class="card-actions">
+                                <button class="btn-edit" onclick="editIdea(${idea.id})" title="تعديل"><i class="fa-solid fa-pen"></i></button>
                                 <button class="btn-delete" onclick="deleteIdea(${idea.id})" title="حذف"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
